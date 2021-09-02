@@ -18,7 +18,7 @@ def PCA(data , k):
         transformed_X : K components of X (first K eigen vectors whith the greatest eigen values)
         """
     # Normalizing data (Subtrackting the mean of each column from each element of that column)
-    data_normalized = (data - data.mean()).copy()
+    data_normalized = (data - data.mean(axis=0)).copy()
         
     # Calculating Covariance Matrix
     covmat = data_normalized.cov()
@@ -26,11 +26,19 @@ def PCA(data , k):
     # Calculating eigenVectors Matrix (Sorted by the eigenValues)
     eigen_values , eigen_vectors = np.linalg.eig(covmat)
     sorted_indx = np.argsort(eigen_values)[::-1]
-    eigen_vectors = eigen_vectors[sorted_indx]
+    eigen_vectors = eigen_vectors[:,sorted_indx]
     eigen_values = eigen_values[sorted_indx]
     
     # Transforming Data to new space
-    transformed_data = data_normalized.dot(eigen_vectors)
+    transformed_data = data_normalized.dot(eigen_vectors[:,:k])
     
     # Returning the first k features with the greatest eigenValue (first k essetial features)
-    return(transformed_data.iloc[:,:k])
+    return(transformed_data)
+
+if __name__=="__main__":
+    from sklearn.datasets import load_breast_cancer
+    X,_ = load_breast_cancer(return_X_y=True,as_frame=True)
+    X_ts = PCA(X, k=2)
+    print("X shape:",X.shape)
+    print("transformed X shape:",X_ts.shape)
+    print("\ntransformed X:\n",X_ts)
