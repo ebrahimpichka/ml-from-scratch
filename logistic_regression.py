@@ -12,8 +12,12 @@ class LogisticRegression():
         b = 0
         self.coeff = {"w": w, "b": b}
         return w,b
-    
+        
+    def eta(self, x):
+        return x + 0.000000000001
+
     def sigmoid(self, z):
+        z = self.eta(z)
         return 1/(1+np.exp(-z))
 
     def optim_step(self, w, b, X, y):
@@ -23,7 +27,7 @@ class LogisticRegression():
         y_pred = self.sigmoid(np.dot(X,w)+b)
         y_T = y.T
 
-        cost = (-1/m)*(y_T.dot(np.log(y_pred)) + ((1-y_T).dot(np.log(1-y_pred))))
+        cost = (-1/m)*(y_T.dot(np.log(self.eta(y_pred))) + ((1-y_T).dot(np.log(self.eta(1-y_pred)))))
         
         # Grad
         dw = (1/m)*(np.dot(X.T, (y_pred-y)))
@@ -51,7 +55,6 @@ class LogisticRegression():
             #weight update
             w = w - (learning_rate * dw)
             b = b - (learning_rate * db)
-
             if (i % 100 == 0):
                 self.costs.append(cost)
                 if trace:
@@ -99,7 +102,7 @@ if __name__ == '__main__':
     X_train,X_test,y_train,y_test = train_test_split(X,y,test_size = 0.20)
 
     logistic_regression = LogisticRegression()
-    coeff, gradient, costs = logistic_regression.fit(X_train, y_train,n_iters=1500,learning_rate=0.3,trace=False)
+    coeff, gradient, costs = logistic_regression.fit(X_train, y_train,n_iters=1000,learning_rate=0.01,trace=False)
 
     pred = logistic_regression.predict(X_test)
     train_pred = logistic_regression.predict(X_train)

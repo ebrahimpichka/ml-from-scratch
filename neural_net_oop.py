@@ -26,7 +26,7 @@ class NeuralNetwork():
 
     def eta(self, x):
         ETA = 0.0000000001
-        return np.maximum(x, ETA)
+        return x+ETA
 
     def sigmoid(self, z):    
         output = 1 / (1 + np.exp(-self.eta(z)))

@@ -3,8 +3,8 @@ import numpy as np
 
 
 def eta(x):
-  ETA = 0.0000000001
-  return np.maximum(x, ETA)
+  ETA = 0.000000001
+  return x + ETA
 
 def sigmoid(z):    
     output = 1 / (1 + np.exp(-eta(z)))
