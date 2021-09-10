@@ -37,8 +37,12 @@ def PCA(data , k):
 
 if __name__=="__main__":
     from sklearn.datasets import load_breast_cancer
-    X,_ = load_breast_cancer(return_X_y=True,as_frame=True)
+    import matplotlib.pyplot as plt
+
+    X,y = load_breast_cancer(return_X_y=True,as_frame=True)
     X_ts = PCA(X, k=2)
     print("X shape:",X.shape)
     print("transformed X shape:",X_ts.shape)
-    print("\ntransformed X:\n",X_ts)
+    # print("\ntransformed X:\n",X_ts)
+    plt.scatter(X_ts.iloc[:,0],X_ts.iloc[:,1],c=y)
+    plt.show()
